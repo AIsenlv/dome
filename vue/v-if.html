@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<div id="app">
+		<div v-if="ok">Yes</div>
+		<div v-else>No</div>
+		<template v-if="oks">
+		  <h1>Title</h1>
+		  <p>Paragraph 1</p>
+		  <p>Paragraph 2</p>
+		</template>
+		<div v-if="type === 'A'">
+		  A
+		</div>
+		<div v-else-if="type === 'B'">
+		  B
+		</div>
+		<div v-else-if="type === 'C'">
+		  C
+		</div>
+		<div v-else>
+		  Not A/B/C
+		</div>
+		
+		<p>===========================================</p>
+		<template v-if="loginType === 'username'">
+		  <label>Username</label>
+		  <input placeholder="Enter your username" key="username-input">
+		</template>
+		<template v-else>
+		  <label>Email</label>
+		  <input placeholder="Enter your email address" key="address-input">
+		</template><br />
+		<button @click='clicks'>login type</button>
+		<p>===========================================</p>
+		
+		<p v-show='ok'>11111111</p>
+		
+		
+	</div>
+</body>
+<script src="js/vue.js"></script>
+<script type="text/javascript" src="js/jquery-1.7.2.min.js" ></script>
+<script>
+	
+	
+	var app=new Vue({
+		el:'#app',
+		data:{
+		   ok:true,
+		   oks:true,
+		   type:'11',
+		   loginType:'username'
+		},methods:{
+			clicks:function(){
+				console.log($(this).text());
+				if(this.loginType!='username'){
+					this.loginType='username'
+				}else {
+					this.loginType='456789'
+				}
+			}
+		}
+	});
+	
+	
+	$('button').click(function(){
+		console.log($(this).text()+'11');
+	});
+</script>
+</html>

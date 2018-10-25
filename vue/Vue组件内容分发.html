@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="js/vuex.js" ></script>
+</head>
+<body>
+	<div id='app'>
+		<myaddbtn>
+			<button slot="left">797979</button>
+			<button slot="right">888</button>
+		</myaddbtn>
+	</div>
+</body>
+<script src="js/vue.js"></script>
+<script>
+	var vm=  new Vue({
+		el:'#app',
+		components:{
+			'myaddbtn':{
+				template:'<div><slot name="left"></slot>11111<slot name="right"></slot></div>'
+			}, 
+			'myher':{
+				template:'<h2>2222222sssss222222</h2>'
+			}
+		}
+		
+	})
+</script>
+</html>

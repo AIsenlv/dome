@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="js/vuex.js" ></script>
+</head>
+<!--<body>
+	<div id='app'>
+		<myheader></myheader>
+		<mylist></mylist>
+	</div>
+</body>
+<script src="js/vue.js"></script>
+<script>
+	var busVue=new Vue();//创建一个空实例
+	var vm=  new Vue({
+		el:'#app',
+		data:{
+			
+		},
+		components:{
+			'myheader':{
+				template:'<h1>{{message}}</h1>',
+				data:function(){
+					return {
+						message:'hello myHeader!!'
+					}
+				},
+				mounted :function(){//订阅
+					busVue.$on("chagneEvents",function(str){//$on 接收
+						//console.log(str);
+						this.message=str
+					}.bind(this)); //修改this 指向
+				}
+			},
+			'mylist':{
+				template:'<ul><li @click="getContent" v-for="item in list">{{item}}</li></ul>',
+				data:function(){
+					return {
+						list:["1111","2222","3333"]
+					}
+				},
+				methods:{
+					getContent:function(ev){
+						busVue.$emit("chagneEvents",ev.target.innerHTML);//$emit发布
+					}
+				}
+			}
+		}
+		
+	})
+</script>
+</html  >-->
+<!---->	
+<!--<body>
+	
+	<div id='app'>
+		{{count}}<br />
+		<myaddbtn :count="count"></myaddbtn><br />
+		<myremovebtn :count="count"></myremovebtn>
+	</div>
+</body>
+<script src="js/vue.js"></script>
+<script>
+	var busVue=new Vue();//创建一个空实例
+	var vm=  new Vue({
+		el:'#app',
+		data:{
+			count:0
+		},
+		mounted:function(){//生命周期订阅
+			busVue.$on("changeEvents",function(str){
+				this.count=str;
+			}.bind(this));
+		},
+		components:{
+			'myaddbtn':{
+				template:'<button @click="setCount">+</button>',
+				props:['count'],
+				methods:{
+					setCount:function(){
+						busVue.$emit("changeEvents",this.count+1)
+					}
+				}
+			},
+			'myremovebtn':{
+				template:'<button @click="setCount">-</button>',
+				props:['count'],
+				methods:{
+					setCount:function(){
+						busVue.$emit("changeEvents",this.count-1)
+					}
+				}
+			}
+		}
+		
+	})
+</script>
+</html>	-->
+
+<!--Vuex-->
+<body>
+	
+	<div id='app'>
+		{{count}}<!--计数--><br />
+		<myaddbtn></myaddbtn><br />
+		<myremovebtn></myremovebtn>
+	</div>
+</body>
+<script src="js/vue.js"></script>
+<script type="module">
+	import c,{aa,bb} from './js/1.js'
+	console.log(c);
+</script>
+<script>
+	var store=new Vuex.Store({
+		state:{//状态
+			count:0
+		},
+		mutations:{//方法
+			add:function(state){
+				state.count++;
+			},
+			remove:function(state){
+				state.count--;
+			}
+		}
+	});//创建
+	
+	var vm=  new Vue({
+		el:'#app',
+		computed:{//计算
+			count:function(){
+				return store.state.count;
+			}
+		},
+		components:{
+			'myaddbtn':{
+				template:'<button @click="setCount">+</button>',
+				methods:{
+					setCount:function(){
+						store.commit('add')//调用公用的加方法
+					}
+				}
+			},
+			'myremovebtn':{
+				template:'<button @click="setCount">-</button>',
+				methods:{
+					setCount:function(){
+						store.commit('remove')//调用公用的减方法
+					}
+				}
+			}
+		}
+		
+	})
+</script>
+</html>

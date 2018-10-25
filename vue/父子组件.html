@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<div id='app'>
+		<mss v-bind:message="message"></mss>
+	</div>
+</body>
+<script src="js/vue.js"></script>
+<script>
+	var vm=  new Vue({
+		el:'#app',
+		data:{
+			list:["11111111111","2222222222222","33333333333"],
+			message:'qwerty',
+			list2:['sdfs','asdfsd','sdfsd']
+		},
+		components:{
+			 'mss':{
+				template: `<div>
+								<h1 v-text='message'></h1>
+								<ul>
+									<li v-for="item in list">{{item}}</li>
+								</ul>
+								<ul>
+									<li v-for="item2 in list2">{{item2}}</li>
+								</ul>
+								<my-nav v-bind:list="list"></my-nav>
+							</div>`,
+				/*data:function(){
+					return {
+						message:'hello myHeader!!'
+					}
+				},*/
+				props: {
+					'list':{
+						type:Array,
+						default:function(){
+							return	["11111111111vv","2222222222222vv","33333333333vv"]
+						}
+					},
+					'message':{
+						type:String,
+						default:function(){
+							return '55555555555555'
+						}
+					},
+					'list2':{
+						type:Array,
+						default:function(){
+							return ['aaa','bbb','ccc']
+						}
+					}
+					
+				}, //父组件向子组件进行通信操作
+	 			components:{
+	 				'my-nav':{
+	 					template:`
+	 						    <ul>
+									<li v-for="item in list">{{item}}</li>
+								</ul>`,
+						props:['list']		
+	 					
+	 				}
+	 			}
+			}
+		}
+	})
+</script>
+</html  >

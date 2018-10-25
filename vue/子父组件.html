@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<div id='app'>
+		<mss @click.native="show" v-bind:message="message" v-bind:list="list"></mss>
+	</div>
+</body>
+<script src="js/vue.js"></script>
+<script>
+	//子组件父组件相互 关键在于信息的传递
+	/*	1,正确的嵌套方式与is 属性 //<tr is="myheader"></tr><!--嵌套的特殊处理-->
+	 *  2，单向数据流   (父组件传递到子组件，然后子组件的数据变化是不会影响到父组件的，但是会有一个警告信息，
+	 * 			所以尽量不要在传递的数据上修改，我们可以通过data函数，或者computed（计算）来修改
+	 * 	)
+	 *  3，数据的作用域（只会在当前数据环境下作用，有自己的独特的作用域）
+	 *  4，原生事件.native (因为vue事件加在组件元素中是会被替换的，所以要加上.native,让他转换成原生事件)
+	 *  5,$refs vue中的dom操作
+	 * 
+	 */
+	
+	var vm=  new Vue({
+		el:'#app',
+		data:{
+			list:["11111111111","2222222222222","33333333333"],
+			message:'hello'
+		},
+		methods:{
+			show:function(){
+				console.log(111);
+			}
+		},
+		components:{
+			 'mss':{
+				template: `<div>
+								<h1 ref="myTitle">{{mymessage}}</h1>
+								<ul>
+									<li v-for="item in list">{{item}}</li>
+								</ul>
+								<my-nav @changeEvents="getChil" v-bind:list="list"></my-nav>
+							</div>`,
+				data:function(){
+					return {
+						mymessage:this.message
+					}
+				},
+				props: {
+					'list':{
+						type:Array,
+						default:function(){
+							return	["11111111111vv","2222222222222vv","33333333333vv"]
+						}
+					},
+					'message':{
+						type:String,
+						default:'hello myHeadio'
+					}
+					
+				}, //父组件向子组件进行通信操作
+				methods:{
+					getChil:function(text){
+						/*console.log(text);
+						this.mymessage=text;*///数据的操作
+						this.$refs.myTitle.innerHTML=text;//vue中的dom操作
+					}
+				},
+	 			components:{
+	 				'my-nav':{
+	 					template:`
+	 						    <ul>
+									<li @click="getContent" v-for="item in list">{{item}}</li>
+								</ul>`,
+						props:['list']	,
+						methods:{
+							getContent:function(ev){
+								this.$emit('changeEvents',ev.target.innerHTML);							
+							}
+						}
+	 					
+	 				}
+	 			}
+			}
+		}
+	})
+</script>
+</html  >

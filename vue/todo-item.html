@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div  id="app7">
+        <ul>
+            <todo-item v-for="item in todos" v-bind:todod="item"  v-bind:key="item.id">
+
+            </todo-item>
+        </ul>
+    </div>
+    <div id="app1">
+        <span >{{mssages}}</span>
+        
+        <div v-bind:id="mssages" @click='clicks'>2222</div>
+        <button :disabled="mssages">{{age+1}}</button>
+        <span>{{ OK ? 'YES' : 'NO' }}</span>
+        <P>{{ mssages.split('').reverse().join('') }}</P>
+        <p v-if="seen">现在你看到我了</p>
+        <a :href='url'>sss</a>
+    </div>
+    <div id="app2">
+    	<p>{{reversedMessage}}</p>
+    	<p @click='clickss'>12548</p>
+    </div>
+
+</body>
+<script src="js/vue.js"></script>
+<script src="js/jquery-1.7.2.min.js"></script>
+<script>
+	 // 定义名为todo-item 的新组件
+    Vue.component('todo-item', {
+        // todo-item 组件现在接受一个
+        // "prop"，类似于一个自定义属性
+        // 这个属性名为 todo。
+        props: ['todod'],
+        template: '<li>{{ todod.text }}</li>'
+    })
+    var app7=new Vue({
+        el:'#app7',
+        data:{
+            todos:[
+                { id: 0, text: '蔬菜' },
+                { id: 1, text: '奶酪' },
+                { id: 2, text: '随便其他什么人吃的东西' }
+            ]
+        }
+    })
+
+    var app=new Vue({ 
+        el:'#app1',
+        data:{
+            mssages:'123456',
+            OK:'NO',
+            age:15,
+            seen:2,
+            url:'http://www.baidu.com'
+        },methods:{
+        	clicks:function(){
+        		alert(111);
+        		return this.mssages.split('').reverse().join('')
+        	}
+        },computed: {
+		    // 计算属性的 getter
+		    reversedMessage: function () {
+		      // `this` 指向 vm 实例
+		      return  Date.now()
+		    }
+        }
+    })
+
+	 var app=new Vue({ 
+        el:'#app2',
+        data:{
+            mssagess:'123456'
+        },methods:{
+        	clickss:function(){
+        		alert(111);
+        	}
+        },computed: {
+		    // 计算属性的 getter
+		    reversedMessage: function () {
+		      // `this` 指向 vm 实例
+		      return this.mssagess.split('').reverse().join('')
+		    }
+        }
+    })
+
+   
+</script>
+</html>

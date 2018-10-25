@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<div id="app">
+		<ul>
+			<li v-for='item in date' :key='item.id' :class="[item.obj,item.id]">
+				{{item.obj}}
+			</li>
+		</ul>
+	</div>
+	<div id="app2">
+		<ul>
+			<!--<li v-for="item in even(date)" :key='item'>
+				{{item}}
+			</li>-->
+			 <li v-for='n in 10'>{{n}}</li>
+		</ul>
+	</div>
+	<div id="todo-list-example">
+		<input type="text" 
+			v-model="newTodoText" 
+			v-on:keyup.enter="addNewodo"
+			placeholder="add a todo"
+		 />
+		 <ul>
+		 	<li
+				is="todo-item"
+				v-for="(todo,index) in todos"
+				v-bind:data-value='index'
+				v-bind:key="todo.id"
+				v-bind:title="todo.title"
+				v-on:remove="todos.splice(index,1)"
+		 	>
+		 	</li>
+		 </ul>
+	</div>
+	
+</body>
+<script src="js/vue.js"></script>
+<script>
+	Vue.component("todo-item",{
+		template:'\
+				<li>\
+					{{title}}\
+					<button v-on:click="$emit(\'remove\')">X</button>\
+				</li>\
+				',
+				 props: ['title']
+	})
+	
+	new Vue({
+		el:"#todo-list-example",
+		data:{
+			newTodoText:'',
+			todos:[
+				{id:1,title:'ODsd'},
+				{id:2,title:'text'},
+				{id:3,title:'sdsn'}
+			],
+			nextTodoId:4
+		},methods:{
+			addNewodo:function(){
+				if(this.newTodoText!=''){
+					this.todos.push({
+						id:this.nextTodoId++,
+						title:this.newTodoText
+					})
+					this.newTodoText=''
+				}
+				
+			}
+		}
+	})
+	
+	
+	
+	
+	var app=new Vue({
+		el:'#app',
+		data:{
+			date:[
+				{id:'1',obj:'a'},
+				{id:'2',obj:'b'},
+				{id:'3',obj:'c'}
+			]
+		}
+	});
+	//app.date.push({id:'4',obj:'d'})//追加
+	//app.date.pop()//删除最后一个 
+	//app.date.shift()//把数组的第一个元素从其中删除,并返回第一个元素的值。
+	//console.log(app.date.shift().obj);
+	//app.date.unshift({id:'4',obj:'d'},{id:'5',obj:'e'})//向数组的开头添加一个或更多元素,并返回新的长度。
+	//console.log(app.date.sort());//排序
+	//app.date.reverse()// 颠倒数组中元素的顺序
+	//filter 创建一个新的数组
+	
+	app.date = Object.assign({}, app.date, [{
+	  id: '12',obj: 'Vue Green'
+	}])
+	
+	//------------------------------------------------------
+	
+	var app2=new Vue({
+		el:'#app2',
+		data:{
+			date:[1,2,3,4,5]
+		},computed:{
+			uson:function(){
+				return this.date.filter(function (number) {
+			      return number % 3 === 0
+			    })
+			}
+		},methods:{
+			 even: function (date) {
+			    return date.filter(function (date) {
+			      return date % 2 === 1
+			    })
+			  }
+		}
+	});
+	
+</script>
+</html>

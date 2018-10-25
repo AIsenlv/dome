@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <title>Title</title>
+    <style>
+    	*{margin:0;padding:0;font-size: 14px;}
+    	#id{
+    		height:40px;line-height: 40px;text-align: center;background: #666;color: white;width:100%;z-index: 11;
+    	}
+    	li{list-style: none;}
+    	button{padding:0 8px;height:40px;border:1px solid #ccc;}
+    	#id button:nth-of-type(1){float:left}
+    	#id button:nth-of-type(2){float:right}
+    	.ulfixed{position:fixed;right:4px;top:50%;z-index: 10;}
+    	.ulfixed li{padding:12px 0;}
+    	#list{position:relative;z-index: 9;width: 100%;overflow: hidden;top:40px}
+    	.li li{padding:8px;border-bottom: 1px solid #ccc;}
+    	p{background: #eaeaea;padding:3px;}
+    	#alert{width:100%;height:100%;background:rgba(0,0,0,0.5);display: flex;position:fixed;left:0;top:0;z-index: 20;}
+    	#alert-div{width:220px;height:175px;border-radius: 4px;position:relative;background: #fff;margin:auto;}
+    	#alert-title{padding:5px;border-bottom: 1px solid #ccc;background: #fff;    border-radius: 5px  5px 0 0;}
+    	#alert-tag{height:100px;line-height: 100px;padding-left:20px;background: #fff;}
+    	#alert-but{position:absolute;height: 40px;width: 100%;right: 0;bottom: 0;background: #fff;text-align: right;border-radius:0 0 5px  5px ;}
+    	#alert-but button{padding:3px;background: #fff;height: auto;margin-right:10px ;}
+    	
+    </style>
+    <script type="text/javascript" src="js/vuex.js" ></script>
+</head>
+<body>
+	<div id='app'>
+		<myaddbtn names='通信录'>
+				<button @click="change" name="left">返回</button>	
+				<button @click="changes">主页</button>
+		</myaddbtn>
+		<my-list :user-data="userData"></my-list>
+		<!--<my-alert tit='呼叫'>
+			<div id="alert-but">
+				<button @touchstart="qunding">确定</button>
+				<button @touchstart="quxiao">取消</button>
+			</div>
+		</my-alert>-->
+	</div>
+</body>
+<script src="js/vue.js"></script>
+<script>
+	/*
+	 * 1，编写基础的html和css
+	 * 2，提取出组件
+	 * 3，数据传输
+	 * 4，内容分发
+	 * 5，添加事件方法
+	 */
+	
+	var userData=[
+		{'index':"A","list":[
+			{'name':'a1','tag':'123456789'},
+			{'name':'a2','tag':'123456789'},
+			{'name':'a3','tag':'123456789'},
+		]},
+		{'index':"B","list":[
+			{'name':'b1','tag':'12345678b'},
+			{'name':'b2','tag':'12345678b'},
+			{'name':'b3','tag':'12345678b'},
+		]},
+		{'index':"C","list":[
+			{'name':'c1','tag':'12345678c'},
+			{'name':'c2','tag':'12345678c'},
+			{'name':'c3','tag':'12345678c'},
+		]},
+		{'index':"D","list":[
+			{'name':'d1','tag':'12345678d'},
+			{'name':'d2','tag':'12345678d'},
+			{'name':'d3','tag':'12345678d'},
+		]},
+		{'index':"E","list":[
+			{'name':'e1','tag':'12345678e'},
+			{'name':'e2','tag':'12345678e'},
+			{'name':'e3','tag':'12345678e'},
+		]},
+		{'index':"F","list":[
+			{'name':'f1','tag':'12345678f'},
+			{'name':'f2','tag':'12345678f'},
+			{'name':'f3','tag':'12345678f'},
+		]}
+	];
+	//var butalert=new Vue();
+	
+	var myalert=(function(){ //声明一个组件
+		var useData={
+			title:'弹窗',
+			body:'',
+			confirm:null,
+			cancel:null
+		}
+		/*<div id="alert-but">
+			<button @touchstart="qunding">确定</button>
+			<button @touchstart="quxiao">取消</button>
+		</div>*/
+		var alerthtml={
+			template:`<div id="alert" ref="alert" >
+								<div id="alert-div">
+									<p id="alert-title">{{tit}}</p>
+									<p id="alert-tag">{{alertdata}}</p>
+									<div id="alert-but">
+										<button v-if="confirm" @touchstart="confirm">确定</button>
+										<button v-if="cancel" @touchstart="cancel">取消</button>
+									</div>
+								</div>
+							</div>`
+		}
+		
+		var myalerthtml= Vue.extend(alerthtml);//extend扩展另一个组件
+		
+		return function(opts){
+			for(var attr in opts){
+				useData[attr] =opts[attr]
+			}
+			var nde=new myalerthtml({
+				el:document.createElement('div'),
+				data:{
+					tit: useData.title,
+					alertdata: useData.body,
+					confirm:useData.confirm,
+					cancel:useData.cancel
+				}
+			});
+			document.getElementById('app').appendChild(nde.$el);
+		}
+	})();
+	
+	var vm=  new Vue({
+		el:'#app',
+		data:{
+			userData:userData
+		},
+		components:{
+			'myaddbtn':{
+				template:`<div id="id" :style="{'position':customFixed ? 'fixed' : 'static'}">
+							<slot name="left"></slot>
+							{{names}}
+							<slot></slot>	
+						</div>`,
+				props:{
+					'names':{
+						type: String,
+						default:'标题'
+					},
+					'customFixed':{
+						type : Boolean,
+						default:true
+					}
+				}
+			},
+			'my-list':{//滑动处理 touchend会在touchmove 后执行
+				template:`<div id="list" @touchmove="butMv=true">
+							<ul ref="phtml">
+								<li v-for="item in userData">
+									<p>{{item.index}}</p>
+									<ul class="li">
+										<li @touchend="chagnehujiao(itemlist.tag)"  v-for="itemlist in item.list">{{itemlist.name}}</li>
+									</ul>
+								</li>
+							</ul>
+							<ul class="ulfixed" ref="indexd">
+								<li @touchstart="changesColor" v-for="item in userIndex">{{item}}</li>
+							</ul>
+						</div>`,
+				props:{
+					'userData':{
+						type:Array,
+						default:function(){
+							return [];
+						}
+					}
+				},
+				data:function(){
+					return{
+						butMv:false
+					}
+				},
+				computed:{ //计算
+					userIndex:function(){
+							return this.fileIndex(this.userData);
+					}
+				},
+				methods:{
+					fileIndex:function(data){
+						var result=[];
+						for(var i=0;i<data.length;i++){
+							result.push(data[i].index);
+						}
+						return result;
+					},
+					chagnehujiao:function(tag){
+						if(!this.butMv){
+							console.log(tag);
+							//butalert.$emit('changeAlert',tag);
+							myalert({
+								title:'呼叫',
+								body:tag,
+								confirm:function(){
+									console.log(1);
+								},
+								cancel:function(){
+									console.log(2);
+									document.getElementById('alert').remove();
+								}
+							})
+						}else{
+							this.butMv=false;
+						}
+						
+					},
+					setHeight:function(){
+						var hi=this.$refs.indexd.offsetHeight;
+						this.$refs.indexd.style.marginTop=-hi/2 +'px';
+					},
+					changesColor:function(ev){
+						//console.log(ev.target.innerHTML);
+						var hlength=this.$refs.phtml.getElementsByTagName('p');
+						for(var i=0;i<hlength.length;i++){
+							if(hlength[i].innerHTML==ev.target.innerHTML){
+								//document.body.scrollTop=hlength[i].offsetTop;(设置滚动条距离，二种写法)
+								document.documentElement.scrollTop=hlength[i].offsetTop;
+							}
+						}
+					}
+				},
+				/*updated:function(){//更新之后
+					alert(11);
+				},*/
+				mounted:function(){//生命周期（在整个生命周期中只执行一次）
+					this.setHeight()
+				}
+				
+			}/*,
+			'my-alert':{
+				template:`<div id="alert" ref="alert" >
+								<div id="alert-div">
+									<p id="alert-title">{{tit}}</p>
+									<p id="alert-tag">{{alertdata}}</p>
+									<div id="alert-but">
+										<button @touchstart="qunding">确定</button>
+										<button @touchstart="quxiao">取消</button>
+									</div>
+								</div>
+							</div>`,
+				props:{
+					'tit':{
+						type:String,
+						default:'弹框'
+					}
+				},
+				data:function(){
+					return{
+						alertdata:''
+					}
+				},
+				mounted:function(){//生命周期（在整个生命周期中只执行一次）
+					butalert.$on('changeAlert',function(tag){
+						this.alertdata=tag;
+						this.$refs.alert.style.display='flex';
+					}.bind(this))
+				}
+			}*/
+			
+		},
+		methods:{
+			change:function(){
+				alert(111);
+			},
+			changes:function(){
+				alert(222);
+			},
+			qunding:function(){
+				alert('确定');
+				this.$children[2].$el.style.display='none'
+			},
+			quxiao:function(){
+				this.$children[2].$el.style.display='none'
+			}
+			
+		}
+		
+	})
+	
+</script>
+</html>

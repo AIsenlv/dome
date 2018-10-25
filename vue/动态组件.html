@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="js/vuex.js" ></script>
+</head>
+<body>
+	<div id='app'>
+		<button @click="changeEvents(1)">第一项</button>
+		<button @click="changeEvents(2)">第二项</button>
+		<button @click="changeEvents(3)">第三项</button>
+		<keep-alive>
+			<component :is="name"></component>
+		</keep-alive>	<!--keep-alive 用于保留之前的操作-->
+	</div>
+</body>
+<script src="js/vue.js"></script>
+<script>
+	
+	var vm=  new Vue({
+		el:'#app',
+		data:{
+			name:'myaddbtn-1'
+		},
+		components:{
+			'myaddbtn-1':{
+				template:'<div>11111<input type="text"></div>'
+			},
+			'myaddbtn-2':{
+				template:'<div>2222<input type="text"></div>'
+			},
+			'myaddbtn-3':{
+				template:'<div>3333</div>'
+			}
+		},
+		methods:{
+			changeEvents:function(index){
+				this.name='myaddbtn-'+index
+			}
+		}
+		
+	})
+</script>
+</html>

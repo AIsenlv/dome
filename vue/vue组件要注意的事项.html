@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<div id='app'>
+		<table>
+			<tr is="myheader"></tr><!--嵌套的特殊处理-->
+		</table>
+	</div>
+</body>
+<script src="js/vue.js"></script>
+<script>	
+	var vm=  new Vue({
+		el:'#app',
+		data:{
+			
+		},
+		components:{
+			'myheader':{
+				template:'<h1>hello myHeader!!!</h1>'
+			}
+		}
+		
+	})
+</script>
+</html  >

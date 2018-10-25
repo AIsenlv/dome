@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+	<div id='app'>
+		<button v-on:click='mssages +=1'>点击</button>
+		<span v-text='mssages'></span>
+		<br />
+		<button v-on:click="dom('mssages')">点击</button>
+		<button v-on:click="warn('Form cannot be submitted yet.', $event)">
+		  Submit
+		</button>
+		
+		<br />
+		------------------------------------------------------
+		<input v-on:keyup.enter="submit"  ref='input1'>
+		<div @click.ctrl="submit">Do something</div>
+	</div>
+</body>
+<script src="js/vue.js"></script>
+<script>
+	let app=new Vue({
+		el:'#app',
+		data:{
+			mssages:0
+		},methods:{
+			dom:function(won){
+				alert(won);
+			},
+			warn:function(mssages,ever){
+				 if (ever) event.preventDefault()
+    				alert(mssages)
+			},submit:function(){
+				alert(this.$refs.input1.value);
+			}
+		}
+	})
+	
+	//二个数组取相同数，去重
+	function fi(a,b){
+	    var an=new Array();
+	    for(var i=0;i<a.length;i++){
+	        for(var j=0;j<b.length;j++){
+	            if(a[i]==b[j]){
+	                an.push(a[i]);
+	            }
+	        }
+	    }
+	    var n=new Array();
+	    for(var i=0;i<an.length;i++){
+	        if(n.indexOf(an[i])==-1){
+	                n.push(an[i]);
+	        }
+	    }
+	    return n;
+	}
+</script>
+</html>
